@@ -23,4 +23,17 @@ color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 running = True
 while running:
     
+
+
+
+
+
+
+
+
+
+
+
+
+
 pygame.quit()
