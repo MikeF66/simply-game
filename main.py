@@ -45,7 +45,6 @@ while running:
             if not game_started:
                 game_started = True
                 start_time = datetime.now()
-
             total_clicks += 1  # подсчет кликов
             mouse_x, mouse_y = pygame.mouse.get_pos()
             if target_x < mouse_x < target_x + target_width and target_y < mouse_y < target_y + target_height:
