@@ -4,12 +4,12 @@ from datetime import datetime
 
 pygame.init()
 
-total_clicks = 0
-hits = 0
+total_clicks = 0   # начальные условия - кликов 0
+hits = 0           # попаданий 0
 game_started = False
 start_time = None
 
-font = pygame.font.SysFont(None, 24)
+font = pygame.font.SysFont(None, 24) # размер шрифта
 
 def draw_text(surf, text, size, x, y):
     # Рендерим текст
@@ -55,10 +55,10 @@ while running:
     screen.blit(target_image, (target_x, target_y))
 
     if game_started:
-        elapsed_time = datetime.now() - start_time
-        draw_text(screen, f'Время игры: {elapsed_time.seconds}', 18, 10, 10)
-    draw_text(screen, f'Выстрелы: {total_clicks}', 18, 10, 25)
-    draw_text(screen, f'Попадания: {hits}', 18, 10, 40)
+        elapsed_time = datetime.now() - start_time # если игра началась
+        draw_text(screen, f'Время игры: {elapsed_time.seconds}', 18, 10, 10) #вывод времени
+    draw_text(screen, f'Выстрелы: {total_clicks}', 18, 10, 25)  #вывод выстрелов
+    draw_text(screen, f'Попадания: {hits}', 18, 10, 40)   #вывод попаданий
 
     pygame.display.update()
 
