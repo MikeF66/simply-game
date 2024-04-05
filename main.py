@@ -4,11 +4,6 @@ from datetime import datetime
 
 pygame.init()
 
-total_clicks = 0   # начальные условия - кликов 0
-hits = 0           # попаданий 0
-game_started = False
-start_time = None
-
 font = pygame.font.SysFont(None, 24) # размер шрифта
 
 def draw_text(surf, text, size, x, y):   #Рендерим текст
