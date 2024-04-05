@@ -1,7 +1,22 @@
 import pygame
 import random
+from datetime import datetime
 
 pygame.init()
+
+total_clicks = 0
+hits = 0
+game_started = False
+start_time = None
+
+font = pygame.font.SysFont(None, 24)
+
+def draw_text(surf, text, size, x, y):
+    # Рендерим текст
+    text_surface = font.render(text, True, (255, 255, 255))  # Белый цвет текста
+    text_rect = text_surface.get_rect()
+    text_rect.topleft = (x, y)
+    surf.blit(text_surface, text_rect)
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -28,11 +43,23 @@ while running:
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
+            if not game_started:
+                game_started = True
+                start_time = datetime.now()
+            total_clicks += 1  # подсчет кликов
             mouse_x, mouse_y = pygame.mouse.get_pos()
             if target_x < mouse_x < target_x + target_width and target_y < mouse_y < target_y + target_height:
+                hits += 1  # подсчет попаданий
                 target_x = random.randint(0, SCREEN_WIDTH - target_width)
                 target_y = random.randint(0, SCREEN_HEIGHT - target_height)
     screen.blit(target_image, (target_x, target_y))
+
+    if game_started:
+        elapsed_time = datetime.now() - start_time
+        draw_text(screen, f'Время игры: {elapsed_time.seconds}', 18, 10, 10)
+    draw_text(screen, f'Выстрелы: {total_clicks}', 18, 10, 25)
+    draw_text(screen, f'Попадания: {hits}', 18, 10, 40)
+
     pygame.display.update()
 
 pygame.quit()
