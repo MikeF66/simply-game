@@ -11,22 +11,26 @@ pygame.display.set_caption("ТИР")
 photo = pygame.image.load("img/tir-risunok.jpg")
 pygame.display.set_icon(photo)
 
-target_image = pygame.image.load("img/target.jpg")
+target_image = pygame.image.load("img/target.png")
 target_width = 80
 target_height = 80
 
 target_x = random.randint(0, SCREEN_WIDTH - target_width)
 target_y = random.randint(0, SCREEN_HEIGHT - target_height)
 
-color = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
-
-
-
-
+color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
 running = True
-while running
-    pass
+while running:
+    screen.fill(color)
+    for event in pygame.event.get():
+        if event.type == pygame.quit:
+            running = False
+
+        if event.type == MOUSEBUTTONDOWN:
+            if target_x < mouse_x < targen_x + target_width and target_y < mouse_y < targen_y + target_height:
+                
+
 
 
 pygame.quit()
