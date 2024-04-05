@@ -11,7 +11,7 @@ pygame.display.set_caption("ТИР")
 photo = pygame.image.load("img/tir-risunok.jpg")
 pygame.display.set_icon(photo)
 
-target_image = pygame.image.load("img/target.jpg")
+target_image = pygame.image.load("img/target.png")
 target_width = 80
 target_height = 80
 
@@ -25,7 +25,7 @@ color = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
 
 
 running = True
-while running
+while running:
     pass
 
 
