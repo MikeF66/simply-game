@@ -28,6 +28,7 @@ target_x = random.randint(0, SCREEN_WIDTH - target_width)
 target_y = random.randint(0, SCREEN_HEIGHT - target_height)
 
 color = (random.randint(0, 254), random.randint(0, 254), random.randint(0, 254))
+speed = random.randint(1, 10)
 
 total_clicks = 0 # начальные условия: выстрелы=0, попадания=0, время=0
 hits = 0
@@ -40,6 +41,18 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        target_x += random.randint(-10, 10)
+        if target_x > SCREEN_WIDTH - target_width:
+            target_x -= random.randint(0, 10)
+        if 0 < target_x < target_width:
+            target_x += random.randint(0, 10)
+
+        target_y += random.randint(-8, 10)
+        if target_y > SCREEN_HEIGHT - target_height:
+            target_y -= random.randint(0, 10)
+        if 0 < target_y < target_height:
+            target_y += random.randint(0, 10)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if not game_started:
@@ -60,5 +73,6 @@ while running:
     draw_text(screen, f'Попадания: {hits}', 18, 10, 40)   #вывод попаданий
 
     pygame.display.update()
+
 
 pygame.quit()
