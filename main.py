@@ -4,9 +4,8 @@ from datetime import datetime
 
 pygame.init()
 
-font = pygame.font.SysFont(None, 24) # размер шрифта
-
 def draw_text(surf, text, size, x, y):   #Рендерим текст
+    font = pygame.font.SysFont(None, size)  # размер шрифта
     text_surface = font.render(text, True, (255, 255, 255))  # Белый цвет текста
     text_rect = text_surface.get_rect()
     text_rect.topleft = (x, y)
@@ -28,12 +27,12 @@ target_x = random.randint(0, SCREEN_WIDTH - target_width)
 target_y = random.randint(0, SCREEN_HEIGHT - target_height)
 
 color = (random.randint(0, 254), random.randint(0, 254), random.randint(0, 254))
-speed = random.randint(1, 10)
 
 total_clicks = 0 # начальные условия: выстрелы=0, попадания=0, время=0
 hits = 0
 game_started = False
 start_time = None
+game_paused = False  # переменная для паузы в игре
 
 running = True
 while running:
@@ -42,35 +41,52 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        target_x += random.randint(-10, 10)
-        if target_x > SCREEN_WIDTH - target_width:
-            target_x -= random.randint(0, 10)
-        if 0 < target_x < target_width:
-            target_x += random.randint(0, 10)
-
-        target_y += random.randint(-8, 10)
-        if target_y > SCREEN_HEIGHT - target_height:
-            target_y -= random.randint(0, 10)
-        if 0 < target_y < target_height:
-            target_y += random.randint(0, 10)
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if not game_started:
+        if not game_started:
+            draw_text(screen, "Для начала игры кликни мышью", 36, 200, 270)  # Отображаем надпись
+            if event.type == pygame.MOUSEBUTTONDOWN:  # Старт игры после клика
                 game_started = True
                 start_time = datetime.now()
-            total_clicks += 1  # подсчет кликов
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            if target_x < mouse_x < target_x + target_width and target_y < mouse_y < target_y + target_height:
-                hits += 1  # подсчет попаданий
-                target_x = random.randint(0, SCREEN_WIDTH - target_width)
-                target_y = random.randint(0, SCREEN_HEIGHT - target_height)
-    screen.blit(target_image, (target_x, target_y))
 
+        elif game_started and not game_paused:
+            target_x += random.randint(-10, 10)
+            if target_x > SCREEN_WIDTH - target_width:
+                target_x -= random.randint(0, 10)
+            elif 0 < target_x < target_width:
+                target_x += random.randint(0, 10)
+            target_y += random.randint(-8, 10)
+            if target_y > SCREEN_HEIGHT - target_height:
+                target_y -= random.randint(5, 20)
+            elif 0 < target_y < target_height:
+                target_y += random.randint(5, 20)
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if not game_started:
+                    game_started = True
+                    start_time = datetime.now()
+                total_clicks += 1  # подсчет кликов
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if target_x < mouse_x < target_x + target_width and target_y < mouse_y < target_y + target_height:
+                    hits += 1  # подсчет попаданий
+                    target_x = random.randint(0, SCREEN_WIDTH - target_width)
+                    target_y = random.randint(0, SCREEN_HEIGHT - target_height)
+                if total_clicks >= 20:  # условие для паузы
+                    game_paused = True
+                    end_time = datetime.now()  # фксирует время окончания
+
+    if game_started and not game_paused:
+        screen.blit(target_image, (target_x, target_y))
     if game_started:
-        elapsed_time = datetime.now() - start_time # если игра началась
-        draw_text(screen, f'Время игры: {elapsed_time.seconds}', 18, 10, 10) #вывод времени
-    draw_text(screen, f'Выстрелы: {total_clicks}', 18, 10, 25)  #вывод выстрелов
-    draw_text(screen, f'Попадания: {hits}', 18, 10, 40)   #вывод попаданий
+        if game_paused:
+            elapsed_time = end_time - start_time  # время фиксируется на момент паузы
+            size = 36  # размер шрифта
+            draw_text(screen, f'Вы израсходовали обойму: {total_clicks} патронов', 40, 125, 230)  # вывод выстрелов
+            draw_text(screen, f'за время: {elapsed_time.seconds} секунд', 40, 253, 270)  # вывод времени
+            draw_text(screen, f'и попали в цель: {hits} раз', 40, 220, 310)  #вывод попаданий
+        else:
+            elapsed_time = datetime.now() - start_time # если игра началась
+            draw_text(screen, f'Время игры: {elapsed_time.seconds}', 24, 10, 10) #вывод времени
+            draw_text(screen, f'Выстрелы: {total_clicks}', 24, 10, 25)  #вывод выстрелов
+            draw_text(screen, f'Попадания: {hits}', 24, 10, 40)   #вывод попаданий
 
     pygame.display.update()
 
